@@ -53,17 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
             duration: 1
         }, '-=0.5');
 
-    // Navbar Scroll Effect
+    // Navbar Scroll Effect (Removed to keep it always visible)
     const header = document.getElementById('main-header');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('bg-primary/95', 'py-4', 'border-white/10');
-            header.classList.remove('py-6', 'border-white/0');
-        } else {
-            header.classList.remove('bg-primary/95', 'py-4', 'border-white/10');
-            header.classList.add('py-6', 'border-white/0');
-        }
-    });
 
     // Hero Slider
     const slides = [
@@ -110,36 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 400);
     };
 
-    // Filter Logic
-    const filterBtns = document.querySelectorAll('#filter-btns button');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('text-accent', 'active'));
-            btn.classList.add('text-accent', 'active');
-
-            const filter = btn.getAttribute('data-filter');
-
-            galleryItems.forEach(item => {
-                if (filter === 'all' || item.classList.contains(filter)) {
-                    gsap.to(item, {
-                        scale: 1,
-                        opacity: 1,
-                        duration: 0.5,
-                        display: 'block'
-                    });
-                } else {
-                    gsap.to(item, {
-                        scale: 0.8,
-                        opacity: 0,
-                        duration: 0.5,
-                        display: 'none'
-                    });
-                }
-            });
-        });
-    });
 
     // Mobile Menu Toggle
     const menuToggle = document.getElementById('menu-toggle');
@@ -168,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
 
     // Reveal Animations on Scroll
-    const sections = ['#portfolio', '#about', '#services', '#contact'];
+    const sections = ['#featured-stories', '#about', '#services', '#contact'];
     sections.forEach(section => {
         // Heading animation
         gsap.from(section + ' h2', {
@@ -235,4 +196,28 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         ScrollTrigger.refresh();
     }, 1500);
+    // Contact Form to WhatsApp Logic
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const service = document.getElementById('contact-service').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+
+            // Format message for WhatsApp
+            const waNumber = '919553000050';
+            const text = `*New Inquiry from PhotoArmy Website*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Service Interested In:* ${service}%0A%0A*Message:*%0A${message}`;
+
+            // Create WhatsApp Link and Redirect
+            const waLink = `https://wa.me/${waNumber}?text=${text}`;
+            window.open(waLink, '_blank');
+
+            // Optional: reset form after sending
+            contactForm.reset();
+        });
+    }
 });
